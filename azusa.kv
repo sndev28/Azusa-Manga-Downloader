@@ -1,0 +1,91 @@
+#:kivy 2.0
+
+<ProgramWindow>
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        size: root.width, root.height
+
+        padding: 20
+        spacing: 20
+
+        Image:
+            source: 'azusa.jpg'
+            size_hint: (4,4)
+            pos_hint: {'center_x':0.5}
+
+        Label:
+            id: program_name
+            text: 'Azusa - Manga Downloader'
+            font_size: 30
+            pos_hint: {'center_x':0.5}
+
+        BoxLayout:
+            orientation:'horizontal'
+
+            padding: 10
+            spacing: 10
+
+            Label:
+                id: url_label
+                text: 'URL'
+                size_hint_x: 0.25
+
+            TextInput:
+                id: url
+                text: ''
+                readonly: False
+                multiline: False
+
+        BoxLayout:
+            orientation:'horizontal'
+
+            padding: 10
+            spacing: 10
+
+            Label:
+                id: directory_label
+                text: 'Save Directory'
+                size_hint_x: 0.25
+
+            TextInput:
+                id: directory
+                text: ''
+                readonly: False
+                multiline: False
+
+
+        Button:
+            id: batch_download
+            text: 'Batch Download!'
+            pos_hint: {'center_x':0.5}
+            size_hint: (0.15, 0.1)
+            on_press: root.start_download()
+            disable: False
+
+
+        ProgressBar:
+            id: download_progress
+            value: 0
+            min: 0
+            max: 137
+            size_hint_x: 0.8
+            pos_hint: {'center_x':0.5}
+
+        Label:
+            id: download_status
+            text: 'Download not started yet!'
+            pos_hint: {'center_x':0.5}
+
+        Label:
+            id: version_code
+            text: 'Developer : sndev28\nVer 2.69.87'
+            font_size: 12
+            pos_hint: {'x':0.40, 'center_y':0.5}
+            size_hint: (1, 0.25)
+
+
+
+            
+
