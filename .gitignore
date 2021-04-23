@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 temp/
 icon.ico
+pyinstaller/
