@@ -35,6 +35,7 @@
             TextInput:
                 id: url
                 text: ''
+                size_hint_y: 1.4
                 readonly: False
                 multiline: False
 
@@ -52,17 +53,43 @@
             TextInput:
                 id: directory
                 text: ''
+                size_hint_y: 1.4
                 readonly: False
                 multiline: False
+
+
+        BoxLayout:
+            orientation:'horizontal'
+
+            padding: 10
+            spacing: 10
+
+            Label:
+                id: cpu_label
+                text: 'Parellel processes count'
+                size_hint: (0.004,1.3)
+
+            TextInput:
+                id: cpu_count
+                text: ''
+                size_hint: (0.00075,1.3)
+                #pos_hint: {'x':0.1}
+                readonly: False
+                multiline: False
+
+            Label:
+                id: dummy
+                text: ''
+                size_hint: (0.015,1.2)
 
 
         Button:
             id: batch_download
             text: 'Batch Download!'
             pos_hint: {'center_x':0.5}
-            size_hint: (0.15, 0.1)
+            size_hint: (0.15, 0.3)
             on_press: root.start_download()
-            disable: False
+            disabled: False
 
 
         ProgressBar:
@@ -78,9 +105,16 @@
             text: 'Download not started yet!'
             pos_hint: {'center_x':0.5}
 
+        Image:
+            id: gif
+            source: 'animation.gif'
+            opacity: 0
+            size_hint: (1,1)
+            pos_hint: {'center_x':0.5}
+
         Label:
             id: version_code
-            text: 'Developer : sndev28\nVer 2.69.87'
+            text: 'Developer : sndev28\nVer 3.42.16'
             font_size: 12
             pos_hint: {'x':0.40, 'center_y':0.5}
             size_hint: (1, 0.25)
