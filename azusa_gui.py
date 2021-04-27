@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                                 AZUSA                                       #
                                              #                                                                             #
-                                             #                        VERSION CODE : 3.58.76                               #
+                                             #                        VERSION CODE : 3.69.72                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -37,6 +37,7 @@ from threading import Thread
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import sys
+import multiprocessing
 
 
 #Helper modules
@@ -44,10 +45,11 @@ import sys
 from retrievers.urlchecker import urlchecker
 from retrievers.helpers import chapter_list_generator
 from retrievers.downloader import downloader
+from retrievers.py_exe import resource_path
 
 
 #version code
-version_code = '3.58.76'
+version_code = '3.69.72'
 
 #Runner
 
@@ -65,7 +67,7 @@ def main():
     from kivy.resources import resource_add_path, resource_find
 
     if hasattr(sys, '_MEIPASS'):
-        resource_add_path(os.path.join(sys._MEIPASS))
+        resource_add_path(path.join(sys._MEIPASS))
 
     Window.size = (950,700)
 
@@ -74,7 +76,9 @@ def main():
 
 
 
-    class ProgramWindow(Widget):    
+    class ProgramWindow(Widget):
+
+        
 
         def start_download(self):
 
@@ -117,7 +121,7 @@ def main():
                 self.ids.download_status.text = 'Download not started yet!'
                 return
 
-            if not os.path.exists(self.ids.directory.text):
+            if not path.exists(self.ids.directory.text):
                 self.ids.directory.text = 'Invalid directory!'
                 self.ids.batch_download.disabled = False #renables button due to error
                 self.ids.directory.readonly = False
@@ -144,7 +148,9 @@ def main():
             self.ids.gif.opacity = 1
 
 
-            downloader(self)
+            download_obj = downloader(self)
+            self.download_process = next(download_obj)
+            next(download_obj)
             alert.play()
 
             #uncomment to view execution time details
@@ -184,6 +190,13 @@ def main():
 
             else:
                 self.ids.download_status.text = 'No available update!'
+
+
+            def cancel_download(self):
+                sys.exit(0)
+
+        
+        
 
 
 

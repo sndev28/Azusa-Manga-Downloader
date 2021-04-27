@@ -82,14 +82,27 @@
                 text: ''
                 size_hint: (0.015,1.2)
 
+        
+        GridLayout:
+            cols:2
+            size_hint_y: 0.3
 
-        Button:
-            id: batch_download
-            text: 'Batch Download!'
-            pos_hint: {'center_x':0.5}
-            size_hint: (0.15, 0.3)
-            on_press: root.start_download()
-            disabled: False
+
+            Button:
+                id: batch_download
+                text: 'Batch Download!'
+                pos_hint: {'center_x':0.5}
+                size_hint: (0.04, 0.3)
+                on_press: root.start_download()
+                disabled: False
+
+            Button:
+                id: cancel_download
+                text: 'Cancel!'
+                pos_hint: {'center_x':0.5}
+                size_hint: (0.04, 0.3)
+                on_press: root.cancel_download()
+                disabled: False
 
 
         ProgressBar:

@@ -1,5 +1,6 @@
 import os
 import concurrent.futures
+from pebble import ProcessPool
 
 #helper functions
 
@@ -38,8 +39,8 @@ def downloader(kivy_object):
 
     if 'manganelo' in site_url or 'mangakakalot' in site_url:               #Mangakakalot or Manganelo
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=no_of_workers) as processes:
-            processing = [processes.submit(mangakakalot.chapter_retrieve, chapter, kivy_object.ids.directory.text) for chapter in chapters]
+        with ProcessPool(max_workers=no_of_workers) as processes:
+            processing = [processes.schedule(mangakakalot.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text)) for chapter in chapters]
             
             for _ in concurrent.futures.as_completed(processing):
                 kivy_object.ids.download_progress.value += 1     #Progress bar update
@@ -71,7 +72,7 @@ def downloader(kivy_object):
 
 
 
-
+    print('All done!')
     kivy_object.ids.download_status.text = 'Download Complete!'
     kivy_object.ids.batch_download.disable = False
     kivy_object.ids.directory.readonly = False
