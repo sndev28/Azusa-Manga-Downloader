@@ -29,7 +29,7 @@ def urlchecker(link):
         options = Options()
         options.add_argument("--headless")
         options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(executable_path='chromedriver.exe', options=options)
+        driver = webdriver.Chrome(executable_path='chromedriver.exe', options = options)
         driver.get(link)
 
         try: 

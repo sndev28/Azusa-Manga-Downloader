@@ -112,12 +112,30 @@
             size_hint: (1,1)
             pos_hint: {'center_x':0.5}
 
-        Label:
-            id: version_code
-            text: 'Developer : sndev28\nVer 3.42.16'
-            font_size: 12
-            pos_hint: {'x':0.40, 'center_y':0.5}
-            size_hint: (1, 0.25)
+        GridLayout:
+            cols:3
+            size_hint_y: 0.1
+
+            Label:
+                id: dummy
+                text: ''
+                size_hint: (0.95, 1.2)
+
+            Label:
+                id: version_code
+                text: 'Developer : sndev28\nVer 3.42.16'
+                font_size: 12
+                pos_hint: {'center_x':0.5, 'center_y':0.5}
+                size_hint: (0.2, 0.25)
+
+            Button:
+                id: update
+                text: 'Update'
+                font_size: 10
+                pos_hint: {'center_x':0.95}
+                size_hint: (0.09, 0.1)
+                on_press: root.updater_button()
+                disabled: False
 
 
 

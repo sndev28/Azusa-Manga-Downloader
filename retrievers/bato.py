@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 
+
 #helper functions
 
 from retrievers.helpers import num_to_fourdigit
@@ -32,7 +33,7 @@ def chapter_retrieve(chapter, save_directory):
         options = Options()
         options.add_argument("--headless")
         options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(executable_path='chromedriver.exe', options=options)
+        driver = webdriver.Chrome(executable_path='chromedriver.exe', options = options)
         driver.get(chapter['Chapter URL'])
 
         url_objects = driver.find_elements_by_class_name('page-img')
@@ -95,7 +96,7 @@ def chapter_meta_creator(site_url):
     options = Options()
     options.add_argument("--headless")
     options.add_argument(f'user-agent={user_agent}')
-    driver = webdriver.Chrome(executable_path='chromedriver.exe', options=options)
+    driver = webdriver.Chrome(executable_path='chromedriver.exe', options = options)
     driver.get(site_url)
     
     chapter_objects = driver.find_elements_by_css_selector('.p-2.d-flex.flex-column.flex-md-row.item')

@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                                 AZUSA                                       #
                                              #                                                                             #
-                                             #                        VERSION CODE : 3.42.16                               #
+                                             #                        VERSION CODE : 3.58.76                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -31,11 +31,12 @@
 
 
 import requests
-from os import path
+from os import path, system
 from bs4 import BeautifulSoup
 from threading import Thread
 import time
-
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+import sys
 
 
 #Helper modules
@@ -44,10 +45,16 @@ from retrievers.urlchecker import urlchecker
 from retrievers.helpers import chapter_list_generator
 from retrievers.downloader import downloader
 
+
+#version code
+version_code = '3.58.76'
+
 #Runner
 
 
 def main():
+
+    multiprocessing.freeze_support()
     
     from kivy.app import App
     from kivy.uix.widget import Widget
@@ -55,11 +62,15 @@ def main():
     from kivy.core.window import Window
     from kivy.clock import Clock
     from kivy.core.audio import SoundLoader
+    from kivy.resources import resource_add_path, resource_find
+
+    if hasattr(sys, '_MEIPASS'):
+        resource_add_path(os.path.join(sys._MEIPASS))
 
     Window.size = (950,700)
 
-    Builder.load_file('azusa.kv')
-    alert = SoundLoader.load('alert.mp3')
+    Builder.load_file(resource_path('azusa.kv'))
+    alert = SoundLoader.load(resource_path('alert.mp3'))
 
 
 
@@ -90,26 +101,29 @@ def main():
                 test = BeautifulSoup(requests.get(self.ids.url.text).text, 'lxml')
             except:
                 self.ids.url.text = 'Invalid url!'
-                self.ids.batch_download.disable = False #renables button due to error
+                self.ids.batch_download.disabled = False #renables button due to error
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
+                self.ids.download_status.text = 'Download not started yet!'
                 return
 
             if not urlchecker(self.ids.url.text):
                 self.ids.url.text = 'Unsupported site!'
-                self.ids.batch_download.disable = False #renables button due to error
+                self.ids.batch_download.disabled = False #renables button due to error
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
+                self.ids.download_status.text = 'Download not started yet!'
                 return
 
-            if not path.exists(self.ids.directory.text):
+            if not os.path.exists(self.ids.directory.text):
                 self.ids.directory.text = 'Invalid directory!'
-                self.ids.batch_download.disable = False #renables button due to error
+                self.ids.batch_download.disabled = False #renables button due to error
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
+                self.ids.download_status.text = 'Download not started yet!'
                 return
             else:
                 if self.ids.directory.text[-1] == '\\':
@@ -137,6 +151,41 @@ def main():
             total_download_time = time.perf_counter() - t1
             print('Execution time = ', total_download_time,'s')
             self.ids.download_status.text += f' Total time taken = {time.strftime("%H:%M:%S", time.gmtime(total_download_time))}'
+
+        def updater_button(self):
+            pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+            pool.submit(self.updater)
+
+        def updater(self):
+
+            self.ids.download_status.text = 'Checking for update!'
+            new_version_code = requests.get('https://drive.google.com/uc?export=download&id=1BKHZ1c_S6xVWwf_LE_prBqGa8X3M6BVH').text
+
+            if new_version_code != version_code:
+                self.ids.download_status.text = 'Downloading update!'
+                update_link = requests.get('https://drive.google.com/uc?export=download&id=1WJaXgcxv2tnn0WCtXiHjLQCET5c10bF_').text
+
+                self.ids.gif.opacity = 1
+
+                download = requests.get(update_link)
+
+                with open(f'Azusa_{new_version_code}.exe', 'wb') as file:
+                    CHUNK_SIZE = 524288
+                    for chunk in download.iter_content(CHUNK_SIZE):
+                        file.write(chunk)
+
+
+                self.ids.download_status.text = 'Updating!'
+
+                self.ids.gif.opacity = 0
+
+                self.ids.download_status.text = 'Please restart the application! Delete the older version!'
+                
+
+            else:
+                self.ids.download_status.text = 'No available update!'
+
+
 
 
 

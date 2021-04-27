@@ -2,11 +2,11 @@ Source code of Azusa - Manga downloader
 
 Program to batch download Manga. 
 
-Current Version : 3.42.16
+Current Version : 3.58.76
 
 Download the executable file of Azusa.
 
-[Windows](https://drive.google.com/file/d/1BdqKtqOG4KeyokX0zl63TL-pMX-xAayi/view?usp=sharing "Azusa for Windows")
+[Windows](https://www.dropbox.com/s/pji7bqqdnztva3n/Azusa_3.58.76.exe?dl=0 "Azusa for Windows")
 
 or you can clone this repository and run the python script.
 
