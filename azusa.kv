@@ -34,7 +34,7 @@
 
             TextInput:
                 id: url
-                text: ''
+                text: 'https://manganelo.com/manga/kishuku_gakkou_no_juliet'
                 size_hint_y: 1.4
                 readonly: False
                 multiline: False
@@ -52,7 +52,7 @@
 
             TextInput:
                 id: directory
-                text: ''
+                text: 'C:\\Users\\niyas\\Desktop\\Dev\\TestingGrounds\\BWaaaaaah'
                 size_hint_y: 1.4
                 readonly: False
                 multiline: False
@@ -71,7 +71,7 @@
 
             TextInput:
                 id: cpu_count
-                text: ''
+                text: '3'
                 size_hint: (0.00075,1.3)
                 #pos_hint: {'x':0.1}
                 readonly: False
@@ -81,6 +81,29 @@
                 id: dummy
                 text: ''
                 size_hint: (0.015,1.2)
+
+        GridLayout:
+            cols: 3
+
+            padding: 10
+            spacing: 10
+
+            Label:
+                id: serialize
+                text: 'Serialize chapter names'
+                size_hint: (0.25,1.3)
+
+            CheckBox:
+                id: serialize_check
+                on_active: root.serialize(self, self.active)
+                size_hint: (0.0075,1.3)
+                #pos_hint: {'x':0.1}
+                disabled: False
+
+            Label:
+                id: dummy
+                text: ''
+                size_hint: (0.9,1.2)
 
         
         GridLayout:
@@ -136,7 +159,7 @@
 
             Label:
                 id: version_code
-                text: 'Developer : sndev28\nVer 3.42.16'
+                text: 'Developer : sndev28\nVer 3.84.69'
                 font_size: 12
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
                 size_hint: (0.2, 0.25)

@@ -6,6 +6,8 @@ from urllib.parse import unquote
 import string
 import random
 import concurrent.futures
+from io import BytesIO
+from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 
 #helper functions
 
@@ -15,15 +17,12 @@ from retrievers.helpers import num_to_fourdigit
 
 #Retriever
 
-def chapter_retrieve(chapter, save_directory):
+def chapter_retrieve(chapter, save_directory, chapter_no, serialize_flag):
 
     cwd = os.getcwd()
 
 
     #Making a new temporary directory
-
-    temp = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 5))
-    os.mkdir(temp)
 
     #Retrieving!
 
@@ -37,11 +36,10 @@ def chapter_retrieve(chapter, save_directory):
         panel_url = [unquote(obj['src']) for obj in panel_objects]
 
     except:
-        shutil.rmtree(temp)
         return chapter
 
 
-    shutil.copy('0000.jpg', temp)
+    #shutil.copy('0000.jpg', temp)
 
     chapter_name = chapter["Chapter Name"]
     
@@ -57,34 +55,39 @@ def chapter_retrieve(chapter, save_directory):
     chapter_name = chapter_name.replace('?', '_')
     chapter_name = chapter_name.replace('*', '_')
 
+    if serialize_flag:
+        chapter_name = str(chapter_no) + '_ ' + chapter_name
+
     
     headers = {'referer':'https://manganelo.com/'}
 
 
     session = requests.Session()
-                
-
-    for index, url in enumerate(panel_url):
-
-        file_name = num_to_fourdigit(index + 1)
-
-        with open(f'{cwd}\\{temp}\\{file_name}.jpg', 'wb') as file:
-            file.write(session.get(url, headers = headers).content)
 
 
-
-    zip_name = f'{save_directory}\\{chapter_name}.zip'
     cbz_name = f'{save_directory}\\{chapter_name}.cbz'
 
-    shutil.make_archive(zip_name[:-4], 'zip', temp)
-    
-    try:
-        os.rename(zip_name, cbz_name)
-    except FileExistsError:
-        os.remove(cbz_name)
-        os.rename(zip_name, cbz_name)
 
-    shutil.rmtree(temp)
+    archive = BytesIO()    
+
+    with ZipFile(archive, 'w') as zip_archive:
+        with open('0000.jpg', 'rb') as splash:
+            img_file = ZipInfo('0000.jpg')
+            img_file.compress_type = ZIP_DEFLATED
+            zip_archive.writestr(img_file, splash.read())
+
+        for index, url in enumerate(panel_url):
+            file_name = num_to_fourdigit(index + 1)
+            img_file = ZipInfo(file_name + '.jpg')
+            img_file.compress_type = ZIP_DEFLATED
+            data = session.get(url, headers = headers).content
+            zip_archive.writestr(img_file, data)
+
+
+    with open(cbz_name, 'wb') as file:
+        file.write(archive.getbuffer())
+
+    archive.close()
 
     return False
 

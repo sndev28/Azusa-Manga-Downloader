@@ -11,7 +11,7 @@ import retrievers.bato as bato
 
 #Runner
 
-def downloader(kivy_object):
+def downloader(kivy_object, serialize_flag):
 
     cwd = os.getcwd()
 
@@ -19,7 +19,9 @@ def downloader(kivy_object):
 
     site_url = kivy_object.ids.url.text
 
-    chapters = chapter_list_generator(site_url)           
+    chapters = chapter_list_generator(site_url)  
+
+    chapters.reverse()         
 
     no_of_chapters = len(chapters)
     kivy_object.ids.download_progress.max = no_of_chapters
@@ -40,7 +42,7 @@ def downloader(kivy_object):
     if 'manganelo' in site_url or 'mangakakalot' in site_url:               #Mangakakalot or Manganelo
 
         with ProcessPool(max_workers=no_of_workers) as processes:
-            processing = [processes.schedule(mangakakalot.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text)) for chapter in chapters]
+            processing = [processes.schedule(mangakakalot.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
             
             for _ in concurrent.futures.as_completed(processing):
                 kivy_object.ids.download_progress.value += 1     #Progress bar update
@@ -56,7 +58,7 @@ def downloader(kivy_object):
     elif 'bato' in site_url:                                                #Bato.to
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=no_of_workers) as processes:
-            processing = [processes.submit(bato.chapter_retrieve, chapter, kivy_object.ids.directory.text) for chapter in chapters]
+            processing = [processes.schedule(bato.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
             
             for _ in concurrent.futures.as_completed(processing):
                 kivy_object.ids.download_progress.value += 1     #Progress bar update
@@ -78,4 +80,6 @@ def downloader(kivy_object):
     kivy_object.ids.directory.readonly = False
     kivy_object.ids.url.readonly = False
     kivy_object.ids.cpu_count.readonly = False
+    kivy_object.ids.cancel_download.disabled = True
+    kivy_object.ids.serialize_check.disabled = False
     kivy_object.ids.gif.opacity = 0

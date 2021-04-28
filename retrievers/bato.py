@@ -17,14 +17,9 @@ from retrievers.helpers import num_to_fourdigit
 #Retriever
 
 
-def chapter_retrieve(chapter, save_directory):
+def chapter_retrieve(chapter, save_directory, chapter_no, serialize_flag):
 
     cwd = os.getcwd()
-
-    #Making a new temporary directory
-
-    temp = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 5))
-    os.mkdir(temp)
 
     try:
         #initialzing headless chrome to get chapter list
@@ -42,11 +37,7 @@ def chapter_retrieve(chapter, save_directory):
 
 
     except:
-        shutil.rmtree(temp)
         return chapter
-
-
-    shutil.copy('0000.jpg', temp)
 
     chapter_name = chapter["Chapter Name"]
 
@@ -62,26 +53,35 @@ def chapter_retrieve(chapter, save_directory):
     chapter_name = chapter_name.replace('?', '_')
     chapter_name = chapter_name.replace('*', '_')
 
-    for index, url in enumerate(panel_url):
-
-        file_name = num_to_fourdigit(index + 1)
-        with open(f'{cwd}\\{temp}\\{file_name}.jpg', 'wb') as file:
-            file.write(requests.get(url).content)
+    if serialize_flag:
+        chapter_name = str(chapter_no) + '_ ' + chapter_name
 
 
+    session = requests.Session()
 
-    zip_name = f'{save_directory}\\{chapter_name}.zip'
+
     cbz_name = f'{save_directory}\\{chapter_name}.cbz'
 
-    shutil.make_archive(zip_name[:-4], 'zip', temp)
-    
-    try:
-        os.rename(zip_name, cbz_name)
-    except FileExistsError:
-        os.remove(cbz_name)
-        os.rename(zip_name, cbz_name)
+    archive = BytesIO()    
 
-    shutil.rmtree(temp)
+    with ZipFile(archive, 'w') as zip_archive:
+        with open('0000.jpg', 'rb') as splash:
+            img_file = ZipInfo('0000.jpg')
+            img_file.compress_type = ZIP_DEFLATED
+            zip_archive.writestr(img_file, splash.read())
+
+        for index, url in enumerate(panel_url):
+            file_name = num_to_fourdigit(index + 1)
+            img_file = ZipInfo(file_name + '.jpg')
+            img_file.compress_type = ZIP_DEFLATED
+            data = session.get(url).content
+            zip_archive.writestr(img_file, data)
+
+
+    with open(cbz_name, 'wb') as file:
+        file.write(archive.getbuffer())
+
+    archive.close()
 
     return False
 

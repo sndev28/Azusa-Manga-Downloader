@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                                 AZUSA                                       #
                                              #                                                                             #
-                                             #                        VERSION CODE : 3.69.72                               #
+                                             #                        VERSION CODE : 3.84.69                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -49,7 +49,7 @@ from retrievers.py_exe import resource_path
 
 
 #version code
-version_code = '3.69.72'
+version_code = '3.84.69'
 
 #Runner
 
@@ -69,7 +69,7 @@ def main():
     if hasattr(sys, '_MEIPASS'):
         resource_add_path(path.join(sys._MEIPASS))
 
-    Window.size = (950,700)
+    Window.size = (950,750)
 
     Builder.load_file(resource_path('azusa.kv'))
     alert = SoundLoader.load(resource_path('alert.mp3'))
@@ -90,6 +90,8 @@ def main():
             self.ids.directory.readonly = True
             self.ids.url.readonly = True
             self.ids.cpu_count.readonly = True
+            self.ids.cancel_download.disabled = False
+            self.ids.serialize_check.disabled = True
 
             
 
@@ -109,6 +111,8 @@ def main():
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
+                self.ids.cancel_download.disabled = True
+                self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
                 return
 
@@ -118,6 +122,8 @@ def main():
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
+                self.ids.cancel_download.disabled = True
+                self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
                 return
 
@@ -127,6 +133,8 @@ def main():
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
+                self.ids.cancel_download.disabled = True
+                self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
                 return
             else:
@@ -148,9 +156,7 @@ def main():
             self.ids.gif.opacity = 1
 
 
-            download_obj = downloader(self)
-            self.download_process = next(download_obj)
-            next(download_obj)
+            downloader(self, self.serialize_flag)
             alert.play()
 
             #uncomment to view execution time details
@@ -192,8 +198,15 @@ def main():
                 self.ids.download_status.text = 'No available update!'
 
 
-            def cancel_download(self):
-                sys.exit(0)
+        def cancel_download(self):
+            sys.exit(0)
+
+            
+        serialize_flag = False
+        
+        def serialize(self, instance, value):
+            self.serialize_flag = value
+            print(self.serialize_flag)
 
         
         
