@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                                 AZUSA                                       #
                                              #                                                                             #
-                                             #                        VERSION CODE : 3.84.69                               #
+                                             #                        VERSION CODE : 3.87.54                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -49,7 +49,7 @@ from retrievers.py_exe import resource_path
 
 
 #version code
-version_code = '3.84.69'
+version_code = '3.87.54'
 
 #Runner
 
@@ -141,16 +141,6 @@ def main():
                 if self.ids.directory.text[-1] == '\\':
                     self.ids.directory.text = self.ids.directory.text[:-1]
 
-            try:
-                int(self.ids.cpu_count.text)
-
-            except:
-                if self.ids.cpu_count.text == '0':
-                    self.ids.cpu_count.text == '1'
-
-                else:
-                    self.ids.cpu_count.text == '4'
-
             
             #Pacman gif starts
             self.ids.gif.opacity = 1
@@ -207,6 +197,10 @@ def main():
         def serialize(self, instance, value):
             self.serialize_flag = value
             print(self.serialize_flag)
+
+        def cpu_counter(self, *args):
+            self.ids.cpu_count.text = str(args[1])
+
 
         
         
