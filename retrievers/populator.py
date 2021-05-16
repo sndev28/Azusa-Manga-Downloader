@@ -5,8 +5,6 @@ from kivy.uix.label import Label
 
 def chapter_list_populator(kivy_object):
 
-    print('meh')
-
     chapter_list = chapter_list_generator(kivy_object.ids.url.text)
 
     chapter_list.reverse()

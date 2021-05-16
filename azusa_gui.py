@@ -104,6 +104,8 @@ def main():
             self.ids.cancel_download.opacity = 1
             self.ids.populator.opacity = 0
             self.ids.selectiontoggler.opacity = 0
+            self.ids.selectiontoggler.disabled = True
+            self.ids.populator.disabled = True
 
             
 
@@ -153,6 +155,9 @@ def main():
 
         def download_initializer(self):
 
+            for checkbox in self.chapter_list_checkbox:   #to prevent changes to checkboxes during download
+                checkbox.disabled = True
+
             t1 = time.perf_counter()
 
             if self.check_input() == False: #wrong input
@@ -183,7 +188,11 @@ def main():
             self.ids.batch_download.opacity = 1
             self.ids.cancel_download.opacity = 0
             self.ids.populator.opacity = 1
-            self.ids.selectiontoggler.opacity = 1
+            self.ids.populator.disabled = False
+            self.ids.selectiontoggler.disabled = True
+
+            for checkbox in self.chapter_list_checkbox:   #to renable the checkboxes
+                checkbox.disabled = False
 
             #uncomment to view execution time details
             total_download_time = time.perf_counter() - t1
@@ -248,16 +257,21 @@ def main():
 
             print("Populating chapter list!")
 
-            self.ids.batch_download.opacity = 0  #disables button to prevent extra initialization
+            self.ids.batch_download.opacity = 0
+            self.ids.batch_download.disabled = 1  #disables button to prevent extra initialization
             self.ids.download_status.text = 'Populating chapter list!'
 
             self.chapter_list_checkbox = chapter_list_populator(self)
 
             self.ids.batch_download.opacity = 1
+            self.ids.batch_download.disabled = False
             self.ids.download_status.text = 'Download not started yet'
 
             self.ids.populator.opacity = 1
             self.ids.selectiontoggler.opacity = 1
+            self.ids.populator.disabled = False
+            self.ids.selectiontoggler.disabled = False
+
 
 
             
