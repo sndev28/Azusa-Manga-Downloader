@@ -15,16 +15,16 @@ def downloader(kivy_object, serialize_flag):
 
     cwd = os.getcwd()
 
-    kivy_object.root.ids.download_status.text = 'Downloading under progress!'
+    kivy_object.ids.download_status.text = 'Downloading under progress!'
 
-    site_url = kivy_object.root.ids.url.text
+    site_url = kivy_object.ids.url.text
 
     chapters = chapter_list_generator(site_url)  
 
     chapters.reverse()         
 
     no_of_chapters = len(chapters)
-    kivy_object.root.ids.download_progress.max = no_of_chapters
+    kivy_object.ids.download_progress.max = no_of_chapters
 
     
 
@@ -35,21 +35,21 @@ def downloader(kivy_object, serialize_flag):
 
 
 
-    no_of_workers = int(kivy_object.root.ids.cpu_count_slider.value)   #no of parallel downloads
+    no_of_workers = int(kivy_object.ids.cpu_count.text)   #no of parallel downloads
     print("Number of parellel worker = ", no_of_workers)
 
 
     if 'manganelo' in site_url or 'mangakakalot' in site_url:               #Mangakakalot or Manganelo
 
         with ProcessPool(max_workers=no_of_workers) as processes:
-            processing = [processes.schedule(mangakakalot.chapter_retrieve, args=(chapter, kivy_object.root.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
+            processing = [processes.schedule(mangakakalot.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
             
             for _ in concurrent.futures.as_completed(processing):
-                kivy_object.root.ids.download_progress.value += 1     #Progress bar update
+                kivy_object.ids.download_progress.value += 1     #Progress bar update
 
         # sequential downloads
         # for chapter in chapters:
-        #     mangakakalot.chapter_retrieve(chapter, kivy_object.root.ids.directory.text)
+        #     mangakakalot.chapter_retrieve(chapter, kivy_object.ids.directory.text)
 
             
 
@@ -58,14 +58,14 @@ def downloader(kivy_object, serialize_flag):
     elif 'bato' in site_url:                                                #Bato.to
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=no_of_workers) as processes:
-            processing = [processes.schedule(bato.chapter_retrieve, args=(chapter, kivy_object.root.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
+            processing = [processes.schedule(bato.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
             
             for _ in concurrent.futures.as_completed(processing):
-                kivy_object.root.ids.download_progress.value += 1     #Progress bar update
+                kivy_object.ids.download_progress.value += 1     #Progress bar update
 
         # sequential downloads
         # for chapter in chapters:
-        #     bato.chapter_retrieve(chapter, kivy_object.root.ids.directory.text)
+        #     bato.chapter_retrieve(chapter, kivy_object.ids.directory.text)
 
 
 
@@ -75,10 +75,11 @@ def downloader(kivy_object, serialize_flag):
 
 
     print('All done!')
-    kivy_object.root.ids.download_status.text = 'Download Complete!'
-    kivy_object.root.ids.batch_download.disable = False
-    kivy_object.root.ids.directory.readonly = False
-    kivy_object.root.ids.url.readonly = False
-    kivy_object.root.ids.cancel_download.disabled = True
-    kivy_object.root.ids.serialize_check.disabled = False
-    kivy_object.root.ids.gif.opacity = 0
+    kivy_object.ids.download_status.text = 'Download Complete!'
+    kivy_object.ids.batch_download.disable = False
+    kivy_object.ids.directory.readonly = False
+    kivy_object.ids.url.readonly = False
+    kivy_object.ids.cpu_count.readonly = False
+    kivy_object.ids.cancel_download.disabled = True
+    kivy_object.ids.serialize_check.disabled = False
+    kivy_object.ids.gif.opacity = 0
