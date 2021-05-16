@@ -159,34 +159,33 @@ def main():
 
         def updater(self):
 
-            self.t.join()
 
-        #     self.ids.download_status.text = 'Checking for update!'
-        #     new_version_code = requests.get('https://drive.google.com/uc?export=download&id=1BKHZ1c_S6xVWwf_LE_prBqGa8X3M6BVH').text
+            self.ids.download_status.text = 'Checking for update!'
+            new_version_code = requests.get('https://drive.google.com/uc?export=download&id=1BKHZ1c_S6xVWwf_LE_prBqGa8X3M6BVH').text
 
-        #     if new_version_code != version_code:
-        #         self.ids.download_status.text = 'Downloading update!'
-        #         update_link = requests.get('https://drive.google.com/uc?export=download&id=1WJaXgcxv2tnn0WCtXiHjLQCET5c10bF_').text
+            if new_version_code != version_code:
+                self.ids.download_status.text = 'Downloading update!'
+                update_link = requests.get('https://drive.google.com/uc?export=download&id=1WJaXgcxv2tnn0WCtXiHjLQCET5c10bF_').text
 
-        #         self.ids.gif.opacity = 1
+                self.ids.gif.opacity = 1
 
-        #         download = requests.get(update_link)
+                download = requests.get(update_link)
 
-        #         with open(f'Azusa_{new_version_code}.exe', 'wb') as file:
-        #             CHUNK_SIZE = 524288
-        #             for chunk in download.iter_content(CHUNK_SIZE):
-        #                 file.write(chunk)
+                with open(f'Azusa_{new_version_code}.exe', 'wb') as file:
+                    CHUNK_SIZE = 524288
+                    for chunk in download.iter_content(CHUNK_SIZE):
+                        file.write(chunk)
 
 
-        #         self.ids.download_status.text = 'Updating!'
+                self.ids.download_status.text = 'Updating!'
 
-        #         self.ids.gif.opacity = 0
+                self.ids.gif.opacity = 0
 
-        #         self.ids.download_status.text = 'Please restart the application! Delete the older version!'
+                self.ids.download_status.text = 'Please restart the application! Delete the older version!'
                 
 
-        #     else:
-        #         self.ids.download_status.text = 'No available update!'
+            else:
+                self.ids.download_status.text = 'No available update!'
 
 
         def cancel_download(self):
