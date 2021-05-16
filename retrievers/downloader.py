@@ -17,21 +17,18 @@ def downloader(kivy_object, serialize_flag, **kwargs):
 
     site_url = kivy_object.ids.url.text
 
-    chapters = chapter_list_generator(site_url)  
+    all_chapters = chapter_list_generator(site_url)  
 
+    all_chapters.reverse()
 
     try:
-        
-        if kwargs['mode'] == 'batch':
-            pass
-        elif kwargs['mode'] == 'selected' :
-            pass     #selected chapters    
-
+        if kwargs['mode'] == 'selected':
+            chapters = [all_chapters[index] for index, checkbox in enumerate(kwargs['checklist']) if checkbox.active == True]  #return list of active chapterss
+        else:
+            chapters = all_chapters
     except:
-        pass
+        chapters = all_chapters
 
-
-    chapters.reverse() 
     no_of_chapters = len(chapters)
     no_of_workers = int(kivy_object.ids.cpu_count.text)   #no of parallel downloads
     print("Number of parellel worker = ", no_of_workers)

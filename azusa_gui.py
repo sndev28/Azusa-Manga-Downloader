@@ -30,6 +30,7 @@
 
 
 
+from retrievers.helpers import chapter_list_generator
 import requests
 from os import path, system
 from bs4 import BeautifulSoup
@@ -45,10 +46,11 @@ import multiprocessing
 from retrievers.urlchecker import urlchecker
 from retrievers.downloader import downloader
 from retrievers.py_exe import resource_path
+from retrievers.populator import chapter_list_populator
 
 
 #version code
-version_code = '3.87.54'
+version_code = '4.00.23'
 
 #Runner
 
@@ -64,11 +66,14 @@ def main():
     from kivy.clock import Clock
     from kivy.core.audio import SoundLoader
     from kivy.resources import resource_add_path, resource_find
+    from kivy.uix.label import Label
+    from kivy.uix.checkbox import CheckBox
+    from kivy.uix.gridlayout import GridLayout
 
     if hasattr(sys, '_MEIPASS'):
         resource_add_path(path.join(sys._MEIPASS))
 
-    Window.size = (950,750)
+    Window.size = (950,700)
 
     Builder.load_file(resource_path('azusa.kv'))
     alert = SoundLoader.load(resource_path('resources\\alert.mp3'))
@@ -76,6 +81,10 @@ def main():
 
 
     class ProgramWindow(Widget):
+
+        def __init__(self, **kwargs):
+            super(ProgramWindow, self).__init__(**kwargs)
+            self.chapter_list_checkbox = []          
 
         
 
@@ -91,6 +100,10 @@ def main():
             self.ids.cpu_count.readonly = True
             self.ids.cancel_download.disabled = False
             self.ids.serialize_check.disabled = True
+            self.ids.batch_download.opacity = 0
+            self.ids.cancel_download.opacity = 1
+            self.ids.populator.opacity = 0
+            self.ids.selectiontoggler.opacity = 0
 
             
 
@@ -98,10 +111,7 @@ def main():
             self.t.daemon = True
             self.t.start()
 
-        def download_initializer(self):
-
-            t1 = time.perf_counter()
-
+        def check_input(self):
             try:
                 test = BeautifulSoup(requests.get(self.ids.url.text).text, 'lxml')
             except:
@@ -113,7 +123,7 @@ def main():
                 self.ids.cancel_download.disabled = True
                 self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
-                return
+                return False
 
             if not urlchecker(self.ids.url.text):
                 self.ids.url.text = 'Unsupported site!'
@@ -124,7 +134,7 @@ def main():
                 self.ids.cancel_download.disabled = True
                 self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
-                return
+                return False
 
             if not path.exists(self.ids.directory.text):
                 self.ids.directory.text = 'Invalid directory!'
@@ -135,10 +145,18 @@ def main():
                 self.ids.cancel_download.disabled = True
                 self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
-                return
+                return False
             else:
                 if self.ids.directory.text[-1] == '\\':
                     self.ids.directory.text = self.ids.directory.text[:-1]
+            return True
+
+        def download_initializer(self):
+
+            t1 = time.perf_counter()
+
+            if self.check_input() == False: #wrong input
+                return
 
             
             #Pacman gif starts
@@ -147,17 +165,25 @@ def main():
             
             self.ids.download_status.text = 'Downloading under progress!'
 
-            downloader(self, self.serialize_flag)
+            if self.chapter_list_checkbox == []:
+                downloader(self, self.serialize_flag, mode = 'batch')
+            else:
+                downloader(self, self.serialize_flag, mode = 'selected', checklist = self.chapter_list_checkbox)
+
             alert.play()
             print('All done!')
             self.ids.download_status.text = 'Download Complete!'
-            self.ids.batch_download.disable = False
+            self.ids.batch_download.disabled = False
             self.ids.directory.readonly = False
             self.ids.url.readonly = False
             self.ids.cpu_count.readonly = False
             self.ids.cancel_download.disabled = True
             self.ids.serialize_check.disabled = False
             self.ids.gif.opacity = 0
+            self.ids.batch_download.opacity = 1
+            self.ids.cancel_download.opacity = 0
+            self.ids.populator.opacity = 1
+            self.ids.selectiontoggler.opacity = 1
 
             #uncomment to view execution time details
             total_download_time = time.perf_counter() - t1
@@ -165,8 +191,8 @@ def main():
             self.ids.download_status.text += f' Total time taken = {time.strftime("%H:%M:%S", time.gmtime(total_download_time))}'
 
         def updater_button(self):
-            pool = ThreadPoolExecutor(max_workers=1)
-            pool.submit(self.updater)
+            with ThreadPoolExecutor(max_workers=1)as pool:
+                pool.submit(self.updater)
 
         def updater(self):
 
@@ -211,6 +237,58 @@ def main():
 
         def cpu_counter(self, *args):
             self.ids.cpu_count.text = str(args[1])
+
+        def populator_initializer(self):
+
+            
+            self.ids.chapter_list_scroll.clear_widgets()
+
+            self.ids.selectiontoggler.opacity = 0
+            self.ids.populator.opacity = 0
+
+            print("Populating chapter list!")
+
+            self.ids.batch_download.opacity = 0  #disables button to prevent extra initialization
+            self.ids.download_status.text = 'Populating chapter list!'
+
+            self.chapter_list_checkbox = chapter_list_populator(self)
+
+            self.ids.batch_download.opacity = 1
+            self.ids.download_status.text = 'Download not started yet'
+
+            self.ids.populator.opacity = 1
+            self.ids.selectiontoggler.opacity = 1
+
+
+            
+
+
+        def populate(self):
+
+            if self.check_input() == False:  #wrong input
+                return
+
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                pool.submit(self.populator_initializer)
+
+
+
+        def selecttoggle(self):
+
+            try:
+                current_active_state = self.chapter_list_checkbox[0].active
+
+                for checkbox in self.chapter_list_checkbox:
+                    checkbox.active = not current_active_state
+
+            except AttributeError:   #this gets executed when toggle button is pressed without populating list
+                pass
+
+        
+
+            
+
+
 
 
         
