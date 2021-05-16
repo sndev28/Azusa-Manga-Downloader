@@ -35,7 +35,7 @@ from os import path, system
 from bs4 import BeautifulSoup
 from threading import Thread
 import time
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 import sys
 import multiprocessing
 
@@ -43,7 +43,6 @@ import multiprocessing
 #Helper modules
 
 from retrievers.urlchecker import urlchecker
-from retrievers.helpers import chapter_list_generator
 from retrievers.downloader import downloader
 from retrievers.py_exe import resource_path
 
@@ -72,7 +71,7 @@ def main():
     Window.size = (950,750)
 
     Builder.load_file(resource_path('azusa.kv'))
-    alert = SoundLoader.load(resource_path('alert.mp3'))
+    alert = SoundLoader.load(resource_path('resources\\alert.mp3'))
 
 
 
@@ -95,9 +94,9 @@ def main():
 
             
 
-            t = Thread(target=self.download_initializer)
-            t.daemon = True
-            t.start()
+            self.t = Thread(target=self.download_initializer)
+            self.t.daemon = True
+            self.t.start()
 
         def download_initializer(self):
 
@@ -155,37 +154,39 @@ def main():
             self.ids.download_status.text += f' Total time taken = {time.strftime("%H:%M:%S", time.gmtime(total_download_time))}'
 
         def updater_button(self):
-            pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+            pool = ThreadPoolExecutor(max_workers=1)
             pool.submit(self.updater)
 
         def updater(self):
 
-            self.ids.download_status.text = 'Checking for update!'
-            new_version_code = requests.get('https://drive.google.com/uc?export=download&id=1BKHZ1c_S6xVWwf_LE_prBqGa8X3M6BVH').text
+            self.t.join()
 
-            if new_version_code != version_code:
-                self.ids.download_status.text = 'Downloading update!'
-                update_link = requests.get('https://drive.google.com/uc?export=download&id=1WJaXgcxv2tnn0WCtXiHjLQCET5c10bF_').text
+        #     self.ids.download_status.text = 'Checking for update!'
+        #     new_version_code = requests.get('https://drive.google.com/uc?export=download&id=1BKHZ1c_S6xVWwf_LE_prBqGa8X3M6BVH').text
 
-                self.ids.gif.opacity = 1
+        #     if new_version_code != version_code:
+        #         self.ids.download_status.text = 'Downloading update!'
+        #         update_link = requests.get('https://drive.google.com/uc?export=download&id=1WJaXgcxv2tnn0WCtXiHjLQCET5c10bF_').text
 
-                download = requests.get(update_link)
+        #         self.ids.gif.opacity = 1
 
-                with open(f'Azusa_{new_version_code}.exe', 'wb') as file:
-                    CHUNK_SIZE = 524288
-                    for chunk in download.iter_content(CHUNK_SIZE):
-                        file.write(chunk)
+        #         download = requests.get(update_link)
+
+        #         with open(f'Azusa_{new_version_code}.exe', 'wb') as file:
+        #             CHUNK_SIZE = 524288
+        #             for chunk in download.iter_content(CHUNK_SIZE):
+        #                 file.write(chunk)
 
 
-                self.ids.download_status.text = 'Updating!'
+        #         self.ids.download_status.text = 'Updating!'
 
-                self.ids.gif.opacity = 0
+        #         self.ids.gif.opacity = 0
 
-                self.ids.download_status.text = 'Please restart the application! Delete the older version!'
+        #         self.ids.download_status.text = 'Please restart the application! Delete the older version!'
                 
 
-            else:
-                self.ids.download_status.text = 'No available update!'
+        #     else:
+        #         self.ids.download_status.text = 'No available update!'
 
 
         def cancel_download(self):

@@ -46,6 +46,7 @@ def downloader(kivy_object, serialize_flag):
             
             for _ in concurrent.futures.as_completed(processing):
                 kivy_object.ids.download_progress.value += 1     #Progress bar update
+                # print(_)     #used to print errors in multiprocessing thread
 
         # sequential downloads
         # for chapter in chapters:
@@ -62,6 +63,8 @@ def downloader(kivy_object, serialize_flag):
             
             for _ in concurrent.futures.as_completed(processing):
                 kivy_object.ids.download_progress.value += 1     #Progress bar update
+                # print(_)     #used to print errors in multiprocessing thread
+                
 
         # sequential downloads
         # for chapter in chapters:

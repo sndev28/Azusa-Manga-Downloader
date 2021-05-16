@@ -1,11 +1,11 @@
 import os
-from bs4 import BeautifulSoup
 import requests
-import shutil
 from urllib.parse import unquote
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
+from io import BytesIO
 
 
 
@@ -13,6 +13,7 @@ from selenium.webdriver.chrome.options import Options
 #helper functions
 
 from retrievers.helpers import num_to_fourdigit
+from retrievers.py_exe import resource_path
 
 #Retriever
 
@@ -65,7 +66,7 @@ def chapter_retrieve(chapter, save_directory, chapter_no, serialize_flag):
     archive = BytesIO()    
 
     with ZipFile(archive, 'w') as zip_archive:
-        with open('0000.jpg', 'rb') as splash:
+        with open(resource_path('resources\\0000.jpg'), 'rb') as splash:
             img_file = ZipInfo('0000.jpg')
             img_file.compress_type = ZIP_DEFLATED
             zip_archive.writestr(img_file, splash.read())
