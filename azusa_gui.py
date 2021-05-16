@@ -144,9 +144,20 @@ def main():
             #Pacman gif starts
             self.ids.gif.opacity = 1
 
+            
+            self.ids.download_status.text = 'Downloading under progress!'
 
             downloader(self, self.serialize_flag)
             alert.play()
+            print('All done!')
+            self.ids.download_status.text = 'Download Complete!'
+            self.ids.batch_download.disable = False
+            self.ids.directory.readonly = False
+            self.ids.url.readonly = False
+            self.ids.cpu_count.readonly = False
+            self.ids.cancel_download.disabled = True
+            self.ids.serialize_check.disabled = False
+            self.ids.gif.opacity = 0
 
             #uncomment to view execution time details
             total_download_time = time.perf_counter() - t1
