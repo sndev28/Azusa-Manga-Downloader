@@ -12,9 +12,9 @@ Easily one of the fastest batch manga downloader.
 
 Supported sites:
 
-Markup:*Mangakakalot
-       *Manganelo
-       *Bato.to
+* Mangakakalot
+* Manganelo
+* Bato.to
 
 
 For requesting support for new sites, suggestions and feedbacks fill this [form](https://forms.gle/W6igzbXRw9yV7onc6 "Google Form").
