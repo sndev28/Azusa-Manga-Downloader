@@ -10,7 +10,7 @@ or you can clone this repository and run the python script.
 
 Easily one of the fastest batch manga downloader.
 
-Supported sites:
+Supported sites
 Mangakakalot
 Manganelo
 Bato.to
