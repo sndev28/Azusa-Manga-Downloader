@@ -62,12 +62,12 @@ def downloader(kivy_object, serialize_flag, **kwargs):
 
     elif 'bato' in site_url:                                                #Bato.to
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=no_of_workers) as processes:
+        with ProcessPool(max_workers=no_of_workers) as processes:
             processing = [processes.schedule(bato.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]
             
             for _ in concurrent.futures.as_completed(processing):
                 kivy_object.ids.download_progress.value += 1     #Progress bar update
-                # print(_)     #used to print errors in multiprocessing thread
+                print(_)     #used to print errors in multiprocessing thread
                 
 
         # sequential downloads

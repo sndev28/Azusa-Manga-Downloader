@@ -8,6 +8,7 @@ def chapter_list_populator(kivy_object):
     chapter_list = chapter_list_generator(kivy_object.ids.url.text)
 
     chapter_list.reverse()
+    print(chapter_list)
 
     checkboxes = []
 

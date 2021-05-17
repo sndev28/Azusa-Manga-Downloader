@@ -50,7 +50,7 @@ from retrievers.populator import chapter_list_populator
 
 
 #version code
-version_code = '4.00.23'
+version_code = '4.00.24'
 
 #Runner
 

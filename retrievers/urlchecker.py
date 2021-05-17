@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from retrievers.py_exe import resource_path
 
 def urlchecker(link):
 
@@ -29,14 +30,23 @@ def urlchecker(link):
         options = Options()
         options.add_argument("--headless")
         options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(executable_path='chromedriver.exe', options = options)
+        driver = webdriver.Chrome(executable_path=resource_path('resources\\chromedriver.exe'), options = options)
         driver.get(link)
 
-        try: 
-            driver.find_element_by_css_selector('.p-2.d-flex.flex-column.flex-md-row.item')
+        page = BeautifulSoup(str(driver.page_source), 'lxml')
+
+        if page.find('div', class_ = 'mt-4 episode-list'):
             return True
-        except:
+        else:
             return False
+
+        # try: 
+        #     episode_list = driver.find_element_by_css_selector('mt-4 episode-list')
+        #     print(episode_list)
+
+        #     return True
+        # except:
+        #     return False
 
 
 
