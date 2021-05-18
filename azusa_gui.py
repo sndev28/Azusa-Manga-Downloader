@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                                 AZUSA                                       #
                                              #                                                                             #
-                                             #                        VERSION CODE : 3.87.54                               #
+                                             #                        VERSION CODE : 4.10.25                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -50,7 +50,7 @@ from retrievers.populator import chapter_list_populator
 
 
 #version code
-version_code = '4.00.24'
+version_code = '4.10.25'
 
 #Runner
 
@@ -119,10 +119,14 @@ def main():
             except:
                 self.ids.url.text = 'Invalid url!'
                 self.ids.batch_download.disabled = False #renables button due to error
+                self.ids.batch_download.opacity = 1
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
                 self.ids.cancel_download.disabled = True
+                self.ids.cancel_download.opacity = 0
+                self.ids.populator.disabled = False
+                self.ids.populator.opacity = 1
                 self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
                 return False
@@ -130,10 +134,14 @@ def main():
             if not urlchecker(self.ids.url.text):
                 self.ids.url.text = 'Unsupported site!'
                 self.ids.batch_download.disabled = False #renables button due to error
+                self.ids.batch_download.opacity = 1
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
                 self.ids.cancel_download.disabled = True
+                self.ids.cancel_download.opacity = 0
+                self.ids.populator.disabled = False
+                self.ids.populator.opacity = 1
                 self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
                 return False
@@ -141,10 +149,14 @@ def main():
             if not path.exists(self.ids.directory.text):
                 self.ids.directory.text = 'Invalid directory!'
                 self.ids.batch_download.disabled = False #renables button due to error
+                self.ids.batch_download.opacity = 1
                 self.ids.directory.readonly = False
                 self.ids.url.readonly = False
                 self.ids.cpu_count.readonly = False
                 self.ids.cancel_download.disabled = True
+                self.ids.cancel_download.opacity = 0
+                self.ids.populator.disabled = False
+                self.ids.populator.opacity = 1
                 self.ids.serialize_check.disabled = False
                 self.ids.download_status.text = 'Download not started yet!'
                 return False

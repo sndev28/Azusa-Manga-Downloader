@@ -14,13 +14,13 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-                source: 'resources\\background.jpg'
+                source: 'resources\\background2.jpg'
 
         Label:
             id: program_name
             text: 'Azusa - Manga Downloader'
             font_size: 26
-            color: 'black'
+            # color: 'black'
             pos_hint: {'center_x':0.5}
             size_hint_y: .4
 
@@ -54,7 +54,7 @@
                     Label:
                         id: url_label
                         text: '[b]URL[/b]'
-                        color: 'black'
+                        # color: 'black'
                         size_hint_x: 0.25
                         markup: True
 
@@ -79,7 +79,7 @@
                     Label:
                         id: directory_label
                         text: '[b]Save Directory[/b]'
-                        color: 'black'
+                        # color: 'black'
                         size_hint_x: 0.25
                         markup: True
 
@@ -107,13 +107,13 @@
                         text: 'Populate chapter list'
                         background_normal: ''
                         background_color: (0,0,0,0)
-                        color: 'black'
+                        # color: 'black'
                         markup: True
                         on_press: root.populate()
 
                         canvas.before:
                             Color:
-                                rgba: (0,0,0,1)
+                                rgba: (1,1,1,1)
                             # Rectangle:
                             #     pos: self.pos
                             #     size: self.size
@@ -126,7 +126,7 @@
                         text: 'Select/Deselect all'
                         background_normal: ''
                         background_color: (0,0,0,0)
-                        color: 'black'
+                        # color: 'black'
                         markup: True
                         opacity: 0
                         on_press: root.selecttoggle()
@@ -134,7 +134,7 @@
 
                         canvas.before:
                             Color:
-                                rgba: (0,0,0,1)
+                                rgba: (1,1,1,1)
                             # Rectangle:
                             #     pos: self.pos
                             #     size: self.size
@@ -151,7 +151,7 @@
 
                 Label:
                     text: '[b]Chapter List[/b]'
-                    color: 'black'
+                    # color: 'black'
                     size_hint_y: None
                     height: 20
                     markup: True
@@ -208,7 +208,7 @@
                 Label:
                     id: cpu_label
                     text: '[b]Parellel processes count[/b]'
-                    color: 'black'
+                    # color: 'black'
                     size_hint_x: .25
                     # size_hint_y: .3
                     pos_hint: {'center_y': .5}
@@ -251,7 +251,7 @@
                 Label:
                     id: serialize
                     text: '[b]Serialize chapter names[/b]'
-                    color: 'black'
+                    # color: 'black'
                     size_hint: (0.5,1)
                     markup: True
                 
@@ -285,12 +285,12 @@
                 disabled: False
                 background_normal: ''
                 background_color: (0,0,0,0)
-                color: 'black'
+                # color: 'black'
                 markup: True
 
                 canvas.before:
                     Color:
-                        rgba: (0,0,0,1)
+                        rgba: (1,1,1,1)
                     # Rectangle:
                     #     pos: self.pos
                     #     size: self.size
@@ -307,14 +307,14 @@
                 disabled: False
                 background_normal: ''
                 background_color: (0,0,0,0)
-                color: 'black'
+                # color: 'black'
                 opacity: 0
                 markup: True
                 disabled: True
 
                 canvas.before:
                     Color:
-                        rgba: (0,0,0,1)
+                        rgba: (1,1,1,1)
                     # Rectangle:
                     #     pos: self.pos
                     #     size: self.size
@@ -337,7 +337,7 @@
             Label:
                 id: download_status
                 text: '[b]Download not started yet![/b]'
-                color: 'black'
+                # color: 'black'
                 pos_hint: {'center_x':0.5}
                 bold: True
                 markup: True
@@ -360,8 +360,8 @@
 
             Label:
                 id: version_code
-                text: 'Developer : sndev28\nVer 4.00.24'
-                color: 'black'
+                text: 'Developer : sndev28\nVer 4.10.25'
+                # color: 'black'
                 font_size: 12
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
                 size_hint: (0.2, 0.25)
@@ -376,12 +376,12 @@
                 disabled: False
                 background_normal: ''
                 background_color: (0,0,0,0)
-                color: 'black'
+                # color: 'black'
                 markup: True
 
                 canvas.before:
                     Color:
-                        rgba: (0,0,0,1)
+                        rgba: (1,1,1,1)
                     # Rectangle:
                     #     pos: self.pos
                     #     size: self.size
