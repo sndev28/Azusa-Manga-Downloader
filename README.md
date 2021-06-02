@@ -2,7 +2,7 @@ Source code of Azusa - Manga downloader
 
 Program to batch download Manga from Mangakakalot. 
 
-Current Version : 4.10.27
+Current Version : 4.10.28
 
 Download the executable files from the releases of this repository
 

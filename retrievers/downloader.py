@@ -43,7 +43,7 @@ def downloader(kivy_object, serialize_flag, **kwargs):
 
 
 
-    if 'manganelo' in site_url or 'mangakakalot' in site_url or 'readmanganato' in site_url:               #Mangakakalot or Manganelo
+    if 'manganelo' in site_url or 'mangakakalot' in site_url or 'manganato' in site_url:               #Mangakakalot or Manganelo
 
         with ProcessPool(max_workers=no_of_workers) as processes:
             processing = [processes.schedule(mangakakalot.chapter_retrieve, args=(chapter, kivy_object.ids.directory.text, index, serialize_flag)) for index, chapter in enumerate(chapters)]

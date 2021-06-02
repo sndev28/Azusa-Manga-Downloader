@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                                 AZUSA                                       #
                                              #                                                                             #
-                                             #                        VERSION CODE : 4.10.27                               #
+                                             #                        VERSION CODE : 4.10.28                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -50,7 +50,7 @@ from retrievers.populator import chapter_list_populator
 
 
 #version code
-version_code = '4.10.27'
+version_code = '4.10.28'
 
 #Runner
 
