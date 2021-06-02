@@ -19,7 +19,7 @@ def chapter_list_generator(site_url):
 
     ##    ADD SUPPORT FOR NEW SITES HERE: ADD A NEW ENTRY
 
-    if 'manganelo' in site_url or 'mangakakalot' in site_url:
+    if 'manganelo' in site_url or 'mangakakalot' in site_url or 'readmanganato' in site_url:
         
         from retrievers.mangakakalot import chapter_meta_creator
         return chapter_meta_creator(site_url)

@@ -9,7 +9,7 @@ def urlchecker(link):
     #Mangakakalot checks
 
     
-    if 'manganelo' in link or 'mangakakalot' in link:
+    if 'manganelo' in link or 'mangakakalot' in link or 'readmanganato' in link:
         url_object = BeautifulSoup(requests.get(link).text, 'lxml')
         if url_object.find('ul', {'class':'row-content-chapter'}):
             return True
